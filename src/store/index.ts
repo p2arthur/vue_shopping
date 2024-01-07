@@ -31,6 +31,7 @@ const createStoreProperties: CreateStorePropertiesInterface = {
       Object.assign(product, { quantity: 1 });
       console.log('add product', product);
       state.cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     },
 
     removeFromCart(
@@ -38,13 +39,19 @@ const createStoreProperties: CreateStorePropertiesInterface = {
       product: Product
     ) {
       console.log('remove from cart', product);
-      confirm(
+      const assent = confirm(
         `Are you sure you want to remove ${product.title} from your cart?`
-      ) &&
-        (state.cart = state.cart.filter(
-          (cartProduct) => cartProduct.id !== product.id
-        )) &&
-        (product.quantity = 0);
+      );
+      if (!assent) return;
+      state.cart = state.cart.filter(
+        (cartProduct) => cartProduct.id !== product.id
+      );
+      product.quantity = 0;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+
+    loadCart(state: CreateStorePropertiesInterface['state'], cart: Product[]) {
+      state.cart = JSON.parse(cart);
     },
   },
   actions: {
@@ -56,6 +63,12 @@ const createStoreProperties: CreateStorePropertiesInterface = {
       commit('loadProducts', data);
     },
 
+    loadCart({ commit }: { commit: Function }) {
+      const localStorageCart = localStorage.getItem('cart');
+      if (!localStorageCart) return [];
+      console.log('loading local storage cart', localStorageCart);
+      commit('loadCart', localStorageCart);
+    },
     addToCart({ commit }: { commit: Function }, product: Product): void {
       commit('addToCart', product);
     },

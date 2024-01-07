@@ -17,6 +17,7 @@
     name: 'App',
     created() {
       this.$store.dispatch('loadProducts');
+      this.$store.dispatch('loadCart');
     },
     computed: mapState(['cart']),
   };
