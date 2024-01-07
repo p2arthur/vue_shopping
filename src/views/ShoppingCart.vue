@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="grand-total">Grand Total: US$ 22.30</div>
+    <div class="grand-total">Grand Total: {{ this.cartTotal() }}</div>
   </div>
 </template>
 
@@ -55,6 +55,13 @@
     methods: {
       removeFromCart(product: Product) {
         this.$store.dispatch('removeFromCart', product);
+      },
+      cartTotal() {
+        const total = this.cart.reduce((accumulator, product) => {
+          return accumulator + product.price * product.quantity;
+        }, 0);
+
+        return total.toFixed(2);
       },
     },
   };
