@@ -2,50 +2,61 @@
 
 <template>
   <div class="home">
-    aaaaaa
+    aaaaa
     <div class="products">
-      <div class="product">
+      <div
+        :class="{ inBag: this.isInCart(product) }"
+        v-for="product in this.products"
+        :key="product.id"
+        class="product">
         <div
           class="product-image"
-          style="
-            background-image: url('https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg');
-          "></div>
-        <h4>Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</h4>
-        <p class="price">US$ 109.95</p>
-        <button>Add to bag</button>
-      </div>
-      <div class="product">
-        <div
-          class="product-image"
-          style="
-            background-image: url('https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg');
-          "></div>
-        <h4>Mens Casual Premium Slim Fit T-Shirts</h4>
-        <p class="price">US$ 22.30</p>
-        <button>Add to bag</button>
-      </div>
-      <div class="product">
-        <div
-          class="product-image"
-          style="
-            background-image: url('https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg');
-          "></div>
-        <h4>Mens Cotton Jacket</h4>
-        <p class="price">US$ 55.99</p>
-        <button>Add to bag</button>
+          :style="{ backgroundImage: `url(${product.image})` }"></div>
+        <h4>{{ product.name }}</h4>
+        <p class="price">${{ product.price.toFixed(2) }}</p>
+        <button
+          v-if="!this.isInCart(product)"
+          @click="this.addToCart(product)">
+          Add to bag
+        </button>
+        <button
+          @click="this.removeFromCart(product)"
+          class="remove"
+          v-if="this.isInCart(product)">
+          Remove from cart
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import { Product } from '../interfaces/interfaces';
   export default {
     name: 'HomePage',
-    data() {
-      return {};
+
+    computed: {
+      products() {
+        return this.$store.state.products;
+      },
+
+      cart() {
+        return this.$store.state.cart;
+      },
     },
 
-    methods: {},
+    methods: {
+      addToCart(product: Product) {
+        this.$store.dispatch('addToCart', product);
+      },
+      removeFromCart(product: Product) {
+        this.$store.dispatch('removeFromCart', product);
+      },
+      isInCart(product: Product) {
+        const productInCart = this.$store.state.cart.includes(product);
+        return productInCart;
+      },
+    },
   };
 </script>
 

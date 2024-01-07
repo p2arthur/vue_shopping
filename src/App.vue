@@ -3,30 +3,25 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> -
-    <router-link to="/cart">Shopping Bag (0)</router-link> -
-    <router-link to="/sales">Sales</router-link> -
+    <router-link to="/cart"
+      >Shopping Bag ({{ this.cart?.length || 0 }})</router-link
+    >
+    - <router-link to="/sales">Sales</router-link> -
     <router-link to="/product">Product</router-link> -
   </div>
   <router-view />
 </template>
 
 <script lang="ts">
-  import axios from 'axios';
   export default {
     name: 'App',
-
-    methods: {
-      async getAllProducts(): Promise<any> {
-        const { data } = await axios.get('https://fakestoreapi.com/products');
-
-        console.log(data);
-
-        return data;
-      },
+    created() {
+      this.$store.dispatch('loadProducts');
     },
-
-    async created() {
-      await this.getAllProducts();
+    computed: {
+      cart() {
+        return this.$store.state.cart;
+      },
     },
   };
 </script>
