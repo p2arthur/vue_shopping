@@ -46,15 +46,6 @@ const createStoreProperties: CreateStorePropertiesInterface = {
         )) &&
         (product.quantity = 0);
     },
-
-    addToProductQuantity(
-      state: CreateStorePropertiesInterface['state'],
-      product: Product
-    ) {
-      console.log('addToCart');
-      state.cart.find((cartProduct) => cartProduct.id === product.id)
-        .quantity++;
-    },
   },
   actions: {
     async loadProducts({ commit }: { commit: Function }): Promise<void> {
@@ -70,11 +61,8 @@ const createStoreProperties: CreateStorePropertiesInterface = {
     },
 
     removeFromCart({ commit }: { commit: Function }, product: Product): void {
+      console.log('remove from cart');
       commit('removeFromCart', product);
-    },
-
-    addToProductQuantity({ commit }: { commit: Function }, product: Product) {
-      commit('addToProductQuantity', product);
     },
   },
   modules: {},

@@ -7,7 +7,11 @@
       :key="product.id"
       class="items">
       <div class="item">
-        <div class="remove">Remove item</div>
+        <div
+          @click="this.removeFromCart(product)"
+          class="remove">
+          Remove item
+        </div>
         <div class="photo">
           <img
             :src="product.image"
@@ -18,9 +22,13 @@
         </div>
         <div class="price">
           <span class="quantity-area">
-            <button disabled="">-</button>
+            <button
+              @click="product.quantity--"
+              :disabled="product.quantity == 1">
+              -
+            </button>
             <span class="quantity">{{ product.quantity }}</span>
-            <button @click="addToProductQuantity(product)">+</button>
+            <button @click="product.quantity++">+</button>
           </span>
           <span class="amount">{{
             (product.price * product.quantity).toFixed(2)
@@ -42,8 +50,8 @@
     computed: mapState(['cart']),
 
     methods: {
-      addToProductQuantity(product: Product) {
-        this.$store.dispatch('addToProductQuantity', product);
+      removeFromCart(product: Product) {
+        this.$store.dispatch('removeFromCart', product);
       },
     },
   };
