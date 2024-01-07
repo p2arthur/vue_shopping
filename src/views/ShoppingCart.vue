@@ -1,7 +1,10 @@
 <!-- @format -->
 
 <template>
-  <div class="basket">
+  <div v-if="cart.length == 0">no items</div>
+  <div
+    v-if="cart.length > 0"
+    class="basket">
     <div
       v-for="product in cart"
       :key="product.id"
