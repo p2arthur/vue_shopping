@@ -6,7 +6,7 @@
     <div class="products">
       <div
         :class="{ inBag: this.isInCart(product) }"
-        v-for="product in this.products"
+        v-for="product in products"
         :key="product.id"
         class="product">
         <div
@@ -32,18 +32,11 @@
 
 <script lang="ts">
   import { Product } from '../interfaces/interfaces';
+  import { mapState } from 'vuex';
   export default {
     name: 'HomePage',
 
-    computed: {
-      products() {
-        return this.$store.state.products;
-      },
-
-      cart() {
-        return this.$store.state.cart;
-      },
-    },
+    computed: mapState(['products', 'cart']),
 
     methods: {
       addToCart(product: Product) {

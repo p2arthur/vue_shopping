@@ -38,9 +38,22 @@ const createStoreProperties: CreateStorePropertiesInterface = {
       product: Product
     ) {
       console.log('remove from cart', product);
-      state.cart = state.cart.filter(
-        (cartProduct) => cartProduct.id !== product.id
-      );
+      confirm(
+        `Are you sure you want to remove ${product.title} from your cart?`
+      ) &&
+        (state.cart = state.cart.filter(
+          (cartProduct) => cartProduct.id !== product.id
+        )) &&
+        (product.quantity = 0);
+    },
+
+    addToProductQuantity(
+      state: CreateStorePropertiesInterface['state'],
+      product: Product
+    ) {
+      console.log('addToCart');
+      state.cart.find((cartProduct) => cartProduct.id === product.id)
+        .quantity++;
     },
   },
   actions: {
@@ -58,6 +71,10 @@ const createStoreProperties: CreateStorePropertiesInterface = {
 
     removeFromCart({ commit }: { commit: Function }, product: Product): void {
       commit('removeFromCart', product);
+    },
+
+    addToProductQuantity({ commit }: { commit: Function }, product: Product) {
+      commit('addToProductQuantity', product);
     },
   },
   modules: {},
